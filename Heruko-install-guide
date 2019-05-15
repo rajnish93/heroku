@@ -1,0 +1,84 @@
+Getting Started on Heroku with Ruby
+
+For Debian
+
+Installing snap on Debian
+
+$ sudo apt-get update
+$ sudo apt-get install snapd
+
+Check snap
+
+$ snap
+Now install Heroku
+
+sudo snap install heroku --classic
+
+If this gives following error
+
+error: cannot communicate with server: Post http://localhost/v2/snaps/heroku: dial unix /run/snapd.socket: connect: no such file or directory
+
+Then
+
+run following commands
+
+To check snapd service is running
+
+systemctl status snapd.service
+
+To restart service
+
+sudo systemctl restart snapd.service
+
+Now install Heruko
+
+sudo snap install heroku --classic
+
+
+{
+If you come to install heroku snap using snap command through the command line as follow
+sudo snap install heroku --classic (the thing you will find in the heroku doc).
+And that after installation the heroku command isn't available. Then here the solution and the why:
+
+First know that when you install a new snap, it get added to /snap folder. A new folder with the snap name is created (/snap/heroku), and the executable file for the command is added to /snap/bin (/snap/bin/heroku).
+
+Try
+
+/snap/bin/heroku help
+and you will find it work very well.
+
+Solution: So you have just to add /snap/bin to your PATH environement variable.
+
+
+}
+
+AS:
+
+# Add snap executables
+
+export PATH="$PATH:$HOME/snap/bin"
+Now heroku login works
+
+For error : snap-confine has elevated permissions and is not confined but should be. Refusing to continue to avoid permission escalation attacks
+
+Check if snap core is not broken
+$ snap list
+Update the following package
+A. apparmor
+$ sudo apt-get install apparmor
+Now heroku will work.
+$ heroku
+
+Also restart the snapd.service after reboot if heroku gives following error:
+
+internal error, please report: running "heroku" failed: timeout waiting for snap system profiles to get updated
+
+$ sudo systemctl restart snapd.service
+
+If you still get error then there is bug with snap for Debian
+
+Then install using curl command which install heroku in /usr/local/bin/
+
+curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+
